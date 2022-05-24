@@ -27,8 +27,9 @@ void getPassword()
 
     cout<<"Please enter the path to the bump file:"<<endl;
     cin>>pathToFile;
+    pathToFile = "C:\\Users\\User\\Downloads\\execel\\after_auth.img";
 
-    cout<<"Laoding text"<<endl;
+    cout<<"Making text for bump."<<endl;
     ifstream MyReadFile("bump.txt");
     string lines ="";
     string text ="";
@@ -42,21 +43,75 @@ void getPassword()
     while (getline (MyReadFile, lines)) {
         text += lines + '\n';
     } 
-    cout<<"Search for password,"<<endl;
 
-    std::regex patternBlock(" Directory \\d+ for .+\\.zip.+\\..+\\n\\|.+\\n(:=B~(p?))");
-    smatch matches; 
+    cout<<"Please select 1 for a zip file, 2 for a xlsx file and 3 for a ftp client."<<endl;
+    int passwordType;
+    cin >> passwordType;
+
+    cout<<"Searching for password."<<endl;
+
+    if (passwordType == 1)
+    {
+        std::regex patternBlock(" Directory \\d+ for .+\\.zip.+\\..+\\n\\|.+\\n(:=B~(p?))");
+        smatch matches; 
+        
+        if(regex_search(text, matches, patternBlock))
+        {
+            string password = matches.str().substr(matches.str().find('|')+1);
+            password= password.substr(0,password.find('\n'));
+            cout<<"Password fond: "<<password<<endl;
+        }
+        else
+        {
+            cout<<"Password not fond."<<endl;
+        }
+    }
+    else if(passwordType == 2)
+    {
+
+    }
+    else if(passwordType == 3)
+    {
+        std::regex patternBlock1("Bookshelf Symbol 7\\n.+\\nreateTab");
+        std::regex patternBlock2("\\<User\\>.+\\</User\\>.*\\n.*\\<Pass\\>.+\\</Pass\\>.*\\n.*\\<Logontype\\>\\d\\</Logontype\\>");
+        smatch matches; 
+        
+        if(regex_search(text, matches, patternBlock1))
+        {
+            string block = matches.str();
+            
+            vector<string> linesOfBlock;
+ 
+            stringstream ss(block);
+            string lineOfBlock;
+            while (getline(ss, lineOfBlock, '\n')) {
+                linesOfBlock.push_back(lineOfBlock);
+            }
+            cout<<"Password fond: "<<linesOfBlock[1]<<endl;
+        }
+        else if(regex_search(text, matches, patternBlock2))
+        {
+            string block = matches.str();
+            vector<string> linesOfBlock;
+ 
+            stringstream ss(block);
+            string lineOfBlock;
+            while (getline(ss, lineOfBlock, '\n')) {
+                linesOfBlock.push_back(lineOfBlock);
+            }
+
+            string password = linesOfBlock[1];
+            password = password.substr(password.find('>')+1);
+            password = password.substr(0, password.find('<'));
+            cout<<"Password fond: "<<password<<endl;
+        }
+        else
+        {
+            cout<<"Password not fond."<<endl;
+        }
+
+    }
     
-    if(regex_search(text, matches, patternBlock))
-    {
-        string password = matches.str().substr(matches.str().find('|')+1);
-        password= password.substr(0,password.find('\n'));
-        cout<<"Password fond: "<<password<<endl;
-    }
-    else
-    {
-        cout<<"Password not fond."<<endl;
-    }
 }
 
 void getFootprint()
@@ -138,9 +193,9 @@ int main()
         else if (mode == 2)
         {
             getFootprint();
-        }      
+        }   
          
     }while(mode != 3);
-    cout<<"Thank for using  the program. Bye."<<endl;
+    cout<<"Thank for using the program. Bye."<<endl;
     return 0; 
 }
