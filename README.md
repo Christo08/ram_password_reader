@@ -14,5 +14,5 @@ To start the tool run the following comand.
 ```
 
 ## Video Demo
-Follow the YouTube link for a demo of the toll:
+Follow the YouTube link for a demo of the tool:
 [COS 783 - Assignment 4 Demo]()
