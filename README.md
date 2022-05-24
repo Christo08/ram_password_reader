@@ -1,5 +1,5 @@
 # ram_password_reader
-A command line tool for extracting passwordsand footprints of passwords after a file was unlocked from a memory dump. This tool was built for use in a Windows 10 environment, with memory dumps from a Windows XP environment.It makes use of the string command line tool. The tool can find passwords and footprints for .zip file, .xlsx files and ftp connets
+A command line tool for extracting passwordsand footprints of passwords after a file was unlocked from a memory dump. This tool was built for use in a Windows 10 environment, with memory dumps from a Windows XP environment.It makes use of the strings command line tool. The tool can find passwords and footprints for .zip file, .xlsx files and ftp connets
 
 ## Installation and Setup
 To install the tool simply clone the repo (see command below) and extract the string program from the zip file in the same directory. 
