@@ -1,4 +1,5 @@
 #include <iostream> 
+#include <filesystem>
 #include <regex> 
 #include <string.h> 
 #include <fstream>
@@ -30,11 +31,11 @@ void getPassword()
     pathToFile = "C:\\Users\\User\\Downloads\\execel\\after_auth.img";
 
     cout<<"Making text for bump."<<endl;
-    ifstream MyReadFile("bump.txt");
+    ifstream MyReadFile("bumpText.txt");
     string lines ="";
     string text ="";
 
-    string commad = "strings "+pathToFile+" > bump.txt";
+    string commad = "strings "+pathToFile+" > bumpText.txt";
 
     ofstream {"bump.txt"};
 
@@ -43,10 +44,12 @@ void getPassword()
     while (getline (MyReadFile, lines)) {
         text += lines + '\n';
     } 
-
-    cout<<"Please select 1 for a zip file, 2 for a xlsx file and 3 for a ftp client."<<endl;
+    
     int passwordType;
-    cin >> passwordType;
+    do{
+        cout<<"Please select 1 for a zip file, 2 for a xlsx file and 3 for a ftp client."<<endl;
+        cin >> passwordType;
+    }while(passwordType != 1 && passwordType != 2 && passwordType != 3);
 
     cout<<"Searching for password."<<endl;
 
@@ -68,7 +71,43 @@ void getPassword()
     }
     else if(passwordType == 2)
     {
+        std::regex patternBlock1("\\.xlsx(\\s*)\\nE/9(\\s*)\\n.E/9(\\s*)\\n394(\\s*)\\n/x./workbook.xml(\\s*)\\n.+(\\s*)\\nsharedStrings\\.xml");
+        std::regex patternBlock2("Microsoft O(\\s*)\\n[A-Z]:(.+)*.*\\.xlsx(\\s*)\\nA~\\{(\\s*)\\n#9(H|')(\\s*)\\n(p3.(\\s*)\\n)*(B~p3.(\\s*)\\n)?B~%(\\s*)\\n(p3.(\\s*)\\n)?D~\\((\\s*)\\n!Z9(H|')(\\s*)\\n.+(\\s*)\\n");
+        smatch matches; 
+        
+        if(regex_search(text, matches, patternBlock1))
+        {
+            string block = matches.str();
+            vector<string> linesOfBlock;
+ 
+            stringstream ss(block);
+            string lineOfBlock;
+            while (getline(ss, lineOfBlock, '\n')) {
+                linesOfBlock.push_back(lineOfBlock);
+            }
 
+            string password = linesOfBlock[5];
+            cout<<"Password fond: "<<password<<endl;
+        }
+        else if(regex_search(text, matches, patternBlock2))
+        {
+            string block = matches.str();
+            
+            vector<string> linesOfBlock;
+ 
+            stringstream ss(block);
+            string lineOfBlock;
+            int counter =0;
+            while (getline(ss, lineOfBlock, '\n')) {
+                linesOfBlock.push_back(lineOfBlock);
+                counter++;
+            }
+            cout<<"Password fond: "<<linesOfBlock[counter-1]<<endl;
+        }
+        else
+        {
+            cout<<"Password not fond."<<endl;
+        }
     }
     else if(passwordType == 3)
     {
@@ -117,27 +156,26 @@ void getPassword()
 void getFootprint()
 {
     string pathToFile;
-    //"C:\Users\User\Downloads\after_close.img  zip_17094446_pass";
 
     cout<<"Please enter the path to the bump file:"<<endl;
     cin>>pathToFile;
 
-    cout<<"Laoding text"<<endl;
-    ifstream MyReadFile("bump.txt");
+    cout<<"Laoding text."<<endl;
+    ifstream MyReadFile("bumpText.txt");
     string line ="";
     string text ="";
 
-    string commad = "strings "+pathToFile+" > bump.txt";
+    string commad = "strings "+pathToFile+" > bumpText.txt";
 
-    ofstream {"bump.txt"};
+    ofstream {"bumpText.txt"};
 
     exec(commad.c_str());
-
-    cout<<"Search for footprint."<<endl;
 
     string password;
     cout<<"Please enter the password:"<<endl;
     cin>>password;
+
+    cout<<"Search for footprint."<<endl;
 
     string lines[11] = {"","","","","","","","","","",""};
 
@@ -164,20 +202,19 @@ void getFootprint()
             cout<<(counter+1)<<' '<<lines[counter]<<endl;
         }
         int startPosition = lines[5].find(password);
-        cout<<"6 "<<lines[5].substr(0, startPosition)<<endl;
+        cout<<"Before password: "<<lines[5].substr(0, startPosition)<<endl;
         cout<<"Footprint after password:"<<endl;
-        cout<<"1 "<<lines[5].substr((startPosition + password.length()))<<endl;
+        cout<<"After password: "<<lines[5].substr((startPosition + password.length()))<<endl;
         for (int counter = 6; counter < 11; counter++)
         {
-            cout<<(counter+2-6)<<' '<<lines[counter]<<endl;
+            cout<<(counter+1-6)<<' '<<lines[counter]<<endl;
         }
     }
     else
     {
-        cout<<"Footprint not fond."<<endl;
+        cout<<"Can not find the foot print."<<endl;
     }
     
-
 }
 
 int main() 
