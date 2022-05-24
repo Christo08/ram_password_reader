@@ -24,24 +24,24 @@ string exec(const char* cmd) {
 
 void getPassword()
 {
-    //Get path to bump file
+    //Get path to dump file
     string pathToFile;
-    cout<<"Please enter the path to the bump file:"<<endl;
+    cout<<"Please enter the path to the dump file:"<<endl;
     cin>>pathToFile;
 
-    cout<<"Making text for bump."<<endl;
+    cout<<"Making text for dump."<<endl;
 
-    string commad = "strings "+pathToFile+" > bumpText.txt";
+    string commad = "strings "+pathToFile+" > dumpText.txt";
 
     //Create text file
-    ofstream {"bumpText.txt"};
+    ofstream {"dumpText.txt"};
     
     //Create file reader
-    ifstream MyReadFile("bumpText.txt");
+    ifstream MyReadFile("dumpText.txt");
     string lines ="";
     string text ="";
 
-    //Execute commad to change bump file to text
+    //Execute commad to change dump file to text
     exec(commad.c_str());
 
     //Get text for the file
@@ -163,23 +163,23 @@ void getPassword()
 
 void getFootprint()
 {
-    //Get path to bump file
+    //Get path to dump file
     string pathToFile;
-    cout<<"Please enter the path to the bump file:"<<endl;
+    cout<<"Please enter the path to the dump file:"<<endl;
     cin>>pathToFile;
 
-    cout<<"Making text for bump."<<endl;
-    string commad = "strings "+pathToFile+" > bumpText.txt";
+    cout<<"Making text for dump."<<endl;
+    string commad = "strings "+pathToFile+" > dumpText.txt";
 
     //Create text file
-    ofstream {"bumpText.txt"};
+    ofstream {"dumpText.txt"};
 
     //Create file reader
-    ifstream MyReadFile("bumpText.txt");
+    ifstream MyReadFile("dumpText.txt");
     string line ="";
     string text ="";
 
-    //Execute commad to change bump file to text
+    //Execute commad to change dump file to text
     exec(commad.c_str());
 
     //Get password 
@@ -227,7 +227,7 @@ void getFootprint()
     }
     else
     {
-        cout<<"Can not find the foot print."<<endl;
+        cout<<"Can not find the footprint."<<endl;
     }
     
 }
