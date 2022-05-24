@@ -7,6 +7,7 @@ using namespace std;
    
 
 string exec(const char* cmd) {
+    //Execute a commad and return the output
     array<char, 128> buffer;
     string result;
     unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
@@ -23,28 +24,32 @@ string exec(const char* cmd) {
 
 void getPassword()
 {
+    //Get path to bump file
     string pathToFile;
-    //pathToFile = = "C:\\Users\\User\\Downloads\\after_close.img";
-
     cout<<"Please enter the path to the bump file:"<<endl;
     cin>>pathToFile;
-    pathToFile = "C:\\Users\\User\\Downloads\\execel\\after_auth.img";
 
     cout<<"Making text for bump."<<endl;
+
+    string commad = "strings "+pathToFile+" > bumpText.txt";
+
+    //Create text file
+    ofstream {"bumpText.txt"};
+    
+    //Create file reader
     ifstream MyReadFile("bumpText.txt");
     string lines ="";
     string text ="";
 
-    string commad = "strings "+pathToFile+" > bumpText.txt";
-
-    ofstream {"bump.txt"};
-
+    //Execute commad to change bump file to text
     exec(commad.c_str());
 
+    //Get text for the file
     while (getline (MyReadFile, lines)) {
         text += lines + '\n';
     } 
     
+    //Get type of file
     int passwordType;
     do{
         cout<<"Please select 1 for a zip file, 2 for a xlsx file and 3 for a ftp client."<<endl;
@@ -55,6 +60,7 @@ void getPassword()
 
     if (passwordType == 1)
     {
+        //Seacrh for zip password
         std::regex patternBlock(" Directory \\d+ for .+\\.zip.+\\..+\\n\\|.+\\n(:=B~(p?))");
         smatch matches; 
         
@@ -71,6 +77,7 @@ void getPassword()
     }
     else if(passwordType == 2)
     {
+        //Seacrh for xlsx password
         std::regex patternBlock1("\\.xlsx(\\s*)\\nE/9(\\s*)\\n.E/9(\\s*)\\n394(\\s*)\\n/x./workbook.xml(\\s*)\\n.+(\\s*)\\nsharedStrings\\.xml");
         std::regex patternBlock2("Microsoft O(\\s*)\\n[A-Z]:(.+)*.*\\.xlsx(\\s*)\\nA~\\{(\\s*)\\n#9(H|')(\\s*)\\n(p3.(\\s*)\\n)*(B~p3.(\\s*)\\n)?B~%(\\s*)\\n(p3.(\\s*)\\n)?D~\\((\\s*)\\n!Z9(H|')(\\s*)\\n.+(\\s*)\\n");
         smatch matches; 
@@ -111,6 +118,7 @@ void getPassword()
     }
     else if(passwordType == 3)
     {
+        //Seacrh for ftp password
         std::regex patternBlock1("Bookshelf Symbol 7\\n.+\\nreateTab");
         std::regex patternBlock2("\\<User\\>.+\\</User\\>.*\\n.*\\<Pass\\>.+\\</Pass\\>.*\\n.*\\<Logontype\\>\\d\\</Logontype\\>");
         smatch matches; 
@@ -155,22 +163,26 @@ void getPassword()
 
 void getFootprint()
 {
+    //Get path to bump file
     string pathToFile;
-
     cout<<"Please enter the path to the bump file:"<<endl;
     cin>>pathToFile;
 
-    cout<<"Laoding text."<<endl;
+    cout<<"Making text for bump."<<endl;
+    string commad = "strings "+pathToFile+" > bumpText.txt";
+
+    //Create text file
+    ofstream {"bumpText.txt"};
+
+    //Create file reader
     ifstream MyReadFile("bumpText.txt");
     string line ="";
     string text ="";
 
-    string commad = "strings "+pathToFile+" > bumpText.txt";
-
-    ofstream {"bumpText.txt"};
-
+    //Execute commad to change bump file to text
     exec(commad.c_str());
 
+    //Get password 
     string password;
     cout<<"Please enter the password:"<<endl;
     cin>>password;
@@ -181,6 +193,7 @@ void getFootprint()
 
     bool findPassword =false;
 
+    //Search for the password and save the lasted 5 lines and the next 5 lines
     while (getline (MyReadFile, line)) {
         for (int counter = 1; counter < 11; counter++)
         {
@@ -196,6 +209,7 @@ void getFootprint()
     
     if (findPassword)
     {
+        //Print out the footprint
         cout<<"Footprint before password:"<<endl;
         for (int counter = 0; counter < 5; counter++)
         {
@@ -203,6 +217,7 @@ void getFootprint()
         }
         int startPosition = lines[5].find(password);
         cout<<"Before password: "<<lines[5].substr(0, startPosition)<<endl;
+
         cout<<"Footprint after password:"<<endl;
         cout<<"After password: "<<lines[5].substr((startPosition + password.length()))<<endl;
         for (int counter = 6; counter < 11; counter++)
