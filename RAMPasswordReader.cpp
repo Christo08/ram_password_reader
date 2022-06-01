@@ -68,11 +68,11 @@ void getPassword()
         {
             string password = matches.str().substr(matches.str().find('|')+1);
             password= password.substr(0,password.find('\n'));
-            cout<<"Password fond: "<<password<<endl;
+            cout<<"Password found: "<<password<<endl;
         }
         else
         {
-            cout<<"Password not fond."<<endl;
+            cout<<"Password not found."<<endl;
         }
     }
     else if(passwordType == 2)
@@ -94,7 +94,7 @@ void getPassword()
             }
 
             string password = linesOfBlock[5];
-            cout<<"Password fond: "<<password<<endl;
+            cout<<"Password found: "<<password<<endl;
         }
         else if(regex_search(text, matches, patternBlock2))
         {
@@ -109,11 +109,11 @@ void getPassword()
                 linesOfBlock.push_back(lineOfBlock);
                 counter++;
             }
-            cout<<"Password fond: "<<linesOfBlock[counter-1]<<endl;
+            cout<<"Password found: "<<linesOfBlock[counter-1]<<endl;
         }
         else
         {
-            cout<<"Password not fond."<<endl;
+            cout<<"Password not found."<<endl;
         }
     }
     else if(passwordType == 3)
@@ -134,7 +134,7 @@ void getPassword()
             while (getline(ss, lineOfBlock, '\n')) {
                 linesOfBlock.push_back(lineOfBlock);
             }
-            cout<<"Password fond: "<<linesOfBlock[1]<<endl;
+            cout<<"Password found: "<<linesOfBlock[1]<<endl;
         }
         else if(regex_search(text, matches, patternBlock2))
         {
@@ -150,11 +150,11 @@ void getPassword()
             string password = linesOfBlock[1];
             password = password.substr(password.find('>')+1);
             password = password.substr(0, password.find('<'));
-            cout<<"Password fond: "<<password<<endl;
+            cout<<"Password found: "<<password<<endl;
         }
         else
         {
-            cout<<"Password not fond."<<endl;
+            cout<<"Password not found."<<endl;
         }
 
     }
